@@ -79,52 +79,12 @@ public final class MainActivity extends AppCompatActivity implements OnMapsSdkIn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
+    }
 
-        ListAdapter adapter = new CustomArrayAdapter(this, DemoDetailsList.DEMOS);
-
-        ListView demoListView = (ListView) findViewById(R.id.list);
-        if (demoListView != null) {
-            demoListView.setAdapter(adapter);
-            demoListView.setOnItemClickListener(
-                (parent, view, position, id) -> {
-                    DemoDetails demo = (DemoDetails) parent.getItemAtPosition(position);
-                    startActivity(new Intent(view.getContext(), demo.activityClass));
-                });
-        }
-
-        Spinner spinner = (Spinner) findViewById(R.id.map_renderer_spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter =
-            ArrayAdapter.createFromResource(
-                this, R.array.map_renderer_spinner_array, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(
-            new OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String preferredRendererName = ((String) spinner.getSelectedItem());
-                    Renderer preferredRenderer;
-
-                    if (preferredRendererName.equals(getString(R.string.latest))) {
-                        preferredRenderer = Renderer.LATEST;
-                    } else if (preferredRendererName.equals(getString(R.string.legacy))) {
-                        preferredRenderer = Renderer.LEGACY;
-                    } else if (preferredRendererName.equals(getString(R.string.default_renderer))) {
-                        preferredRenderer = null;
-                    } else {
-                        Log.i(TAG, "Error setting renderer with name " + preferredRendererName);
-                        return;
-                    }
-                    MapsInitializer.initialize(getApplicationContext(), preferredRenderer, MainActivity.this);
-
-                    // Disable spinner since renderer cannot be changed once map is intitialized.
-                    spinner.setEnabled(false);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
+    public void goToMap(View v) {
+        Intent i = new Intent(this, MyLocationDemoActivity.class);
+        startActivity(i);
     }
 
     @Override
